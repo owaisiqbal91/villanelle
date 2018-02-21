@@ -1,4 +1,6 @@
-/// <reference path="scripting.ts"/>
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var scripting_1 = require("./scripting");
 /*----------- ZOMBIE ESCAPE!!! -------------------*/
 var world = {};
 var blackboard = {};
@@ -34,11 +36,11 @@ var canEat = function (params) {
     return world["at"][params.agent] === world["at"]["Stranger"]
         || world["at"][params.agent] === world["at"]["Player"];
 };
-var eat = function (params) { return action(canEat, function (params) {
+var eat = function (params) { return scripting_1.action(canEat, function (params) {
     console.log("Game Over!");
 }, params, 0); };
 var move = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         var agent = params.agent;
         var currentLocation = world["at"][agent];
         var destination = params.location;
@@ -50,45 +52,45 @@ var move = function (params) {
     }, params);
 };
 var getIn = function (params) {
-    return action(function (params) { return world["at"][params.agent] === world["at"][params.vehicle]; }, function (params) { return world["at"][params.agent] = params.vehicle; }, params, 0);
+    return scripting_1.action(function (params) { return world["at"][params.agent] === world["at"][params.vehicle]; }, function (params) { return world["at"][params.agent] = params.vehicle; }, params, 0);
 };
 var escape = function (params) {
-    return action(function (params) { return world["at"][params.agent] == params.vehicle; }, function (params) { return world["status"][params.agent].push("escaping"); }, params, 0);
+    return scripting_1.action(function (params) { return world["at"][params.agent] == params.vehicle; }, function (params) { return world["status"][params.agent].push("escaping"); }, params, 0);
 };
 var jumpOn = function (params) {
-    return action(function (params) { return world["at"][params.driver] == params.vehicle
+    return scripting_1.action(function (params) { return world["at"][params.driver] == params.vehicle
         && world["at"][params.vehicle] == world["at"][params.agent]
         && world["status"][params.driver].includes("escaping"); }, function (params) { return world["at"][params.agent] = params.vehicle; }, params);
 };
 //zombie tree
-var zombieTick = selector([
-    neg_guard(canEat, {}, sequence([
+var zombieTick = scripting_1.selector([
+    scripting_1.neg_guard(canEat, {}, scripting_1.sequence([
         move({ location: "Warehouse" }),
         move({ location: "Entrance" })
     ])),
     eat({})
 ]);
 //player tree
-var playerTick = sequence([
+var playerTick = scripting_1.sequence([
     move({ location: "Entrance" }),
     move({ location: "Side" }),
     jumpOn({ driver: "Stranger", vehicle: "Motorcycle" }),
     escape({ vehicle: "Motorcycle" })
 ]);
 //stranger tree
-var strangerTick = sequence([
+var strangerTick = scripting_1.sequence([
     move({ location: "Side" }),
     getIn({ vehicle: "Motorcycle" }),
     escape({ vehicle: "Motorcycle" })
 ]);
-var playerTickStatus = Status.RUNNING, strangerTickStatus = Status.RUNNING, zombieTickStatus = Status.RUNNING;
+var playerTickStatus = scripting_1.Status.RUNNING, strangerTickStatus = scripting_1.Status.RUNNING, zombieTickStatus = scripting_1.Status.RUNNING;
 function worldTick() {
-    if (playerTickStatus != Status.SUCCESS)
-        playerTickStatus = execute(playerTick, "Player", blackboard);
-    if (strangerTickStatus != Status.SUCCESS)
-        strangerTickStatus = execute(strangerTick, "Stranger", blackboard);
-    if (zombieTickStatus != Status.SUCCESS)
-        zombieTickStatus = execute(zombieTick, "Zombie", blackboard);
+    if (playerTickStatus != scripting_1.Status.SUCCESS)
+        playerTickStatus = scripting_1.execute(playerTick, "Player", blackboard);
+    if (strangerTickStatus != scripting_1.Status.SUCCESS)
+        strangerTickStatus = scripting_1.execute(strangerTick, "Stranger", blackboard);
+    if (zombieTickStatus != scripting_1.Status.SUCCESS)
+        zombieTickStatus = scripting_1.execute(zombieTick, "Zombie", blackboard);
 }
 /*----------- RENDERING -------------------*/
 var canvas = document.getElementById('display');

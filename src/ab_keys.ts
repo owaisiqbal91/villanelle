@@ -1,4 +1,4 @@
-/// <reference path="scripting.ts"/>
+import {action, execute, neg_guard, Precondition, selector, Tick} from "./scripting";
 
 /*------------------------------------------------*/
 /*

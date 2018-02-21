@@ -1,6 +1,7 @@
-/// <reference path="scripting.ts"/>
+import {action, execute, neg_guard, Precondition, selector, sequence, Status, Tick} from "./scripting";
 
 /*----------- ZOMBIE ESCAPE!!! -------------------*/
+
 var world = {};
 var blackboard: any = {};
 //initial state

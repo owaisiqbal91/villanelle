@@ -1,4 +1,6 @@
-/// <reference path="scripting.ts"/>
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var scripting_1 = require("./scripting");
 /*------------------------------------------------*/
 /*
 
@@ -76,7 +78,7 @@ var pathOpen = function (params) {
     return visited[params.goal] == true || key[params.agent] == true;
 };
 var moveTowardsGoal = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         var agent = params.agent;
         var current = currentLocation[agent];
         var next = getNextTowardsGoal(current, params.goal);
@@ -91,7 +93,7 @@ var moveTowardsGoal = function (params) {
     }, params, 0);
 };
 var explore = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         var agent = params.agent;
         var next = getNextToExplore(agent);
         // console.log("explore: " + (next != undefined));
@@ -104,7 +106,7 @@ var explore = function (params) {
     }, params, 0);
 };
 var askKey = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         // console.log("pickupKey: " + (currentLocation[params.agent] == currentLocation[params.other] && key[params.other]));
         return currentLocation[params.agent] == currentLocation[params.other] && key[params.other];
     }, function (params) {
@@ -113,7 +115,7 @@ var askKey = function (params) {
     }, params, 0);
 };
 var giveKey = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         // console.log("giveKey: " + (key[params.agent] && currentLocation[params.agent] == currentLocation[params.other] && keyAskedFrom[params.agent] == params.other));
         return key[params.agent] && currentLocation[params.agent] == currentLocation[params.other] && keyAskedFrom[params.agent] == params.other;
     }, function (params) {
@@ -124,7 +126,7 @@ var giveKey = function (params) {
     }, params, 0);
 };
 var pickupKey = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         var agent = params.agent;
         var current = currentLocation[agent];
         var keyLocation = currentLocation.key;
@@ -137,7 +139,7 @@ var pickupKey = function (params) {
     }, params, 0);
 };
 var useKey = function (params) {
-    return action(function (params) {
+    return scripting_1.action(function (params) {
         var agent = params.agent;
         var current = currentLocation[agent];
         var next = getNextTowardsGoal(current, params.goal);
@@ -153,14 +155,14 @@ var useKey = function (params) {
 };
 //agent tree
 function getAgentTree(params) {
-    return neg_guard(atGoal, params, selector([
-        neg_guard(pathOpen, params, //no key
-        selector([
+    return scripting_1.neg_guard(atGoal, params, scripting_1.selector([
+        scripting_1.neg_guard(pathOpen, params, //no key
+        scripting_1.selector([
             pickupKey({}),
             askKey(params),
             explore({})
         ])),
-        selector([
+        scripting_1.selector([
             useKey(params),
             giveKey(params),
             moveTowardsGoal(params)
@@ -170,9 +172,9 @@ function getAgentTree(params) {
 var blackboard = {};
 function runWorldTick() {
     var aTree = getAgentTree({ goal: 4, other: "b" });
-    execute(aTree, "a", blackboard);
+    scripting_1.execute(aTree, "a", blackboard);
     var bTree = getAgentTree({ goal: 6, other: "a" });
-    execute(bTree, "b", blackboard);
+    scripting_1.execute(bTree, "b", blackboard);
 }
 for (var i = 0; i < 7; i++) {
     runWorldTick();
