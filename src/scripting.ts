@@ -281,13 +281,15 @@ export function attachTreeToAgent(agent: string, tree: Tick) {
 //TODO add variables to user action texts
 var userInteractionObject = {
     text: "",
-    userActions: {}
+    userActionsText: []
 }
 var userInteractionTrees = [];
+var userActions = {};
 
 function runUserInteractionTrees(blackboard) {
     userInteractionObject.text = "";
-    userInteractionObject.userActions = {}; //{"Go to location X" : effect
+    userInteractionObject.userActionsText = [];
+    userActions = {};//{"Go to location X" : effect
     //TODO run the display trees
     for (var i = 0; i < userInteractionTrees.length; i++) {
         execute(userInteractionTrees[i], "interactionAgent", blackboard);
@@ -298,7 +300,8 @@ function runUserInteractionTrees(blackboard) {
 
 function addUserAction(text: string, effect: () => any) {
     //TODO replace variables in text of user actions from variable set (this could be done via user too)
-    userInteractionObject.userActions[text] = effect;
+    userActions[text] = effect;
+    userInteractionObject.userActionsText.push(text);
 }
 
 export let displayDescriptionAction = (text: string) =>
@@ -318,7 +321,7 @@ export function addUserInteractionTree(tick: Tick) {
 
 export function executeUserAction(text: string) {
     //execute the user action
-    var userAction = userInteractionObject.userActions[text];
+    var userAction = userActions[text];
     userAction();
 }
 
@@ -334,15 +337,6 @@ export function getUserInteractionObject() {
 }
 
 export function worldTick(userActionText?: string) {
-    if (!isUndefined(userActionText)) {
-        var userActionEffect = userInteractionObject.userActions[userActionText];
-        if (isUndefined(userActionEffect)) {
-            console.log("Error! Found no matching effect for userAction: " + userActionText);
-        }
-        userActionEffect();
-    }
-
-    runUserInteractionTrees(blackboard);
     //all agent ticks
     for (var i = 0; i < agents.length; i++) {
         var tree = agentTrees[agents[i]];
@@ -350,4 +344,5 @@ export function worldTick(userActionText?: string) {
             execute(tree, agents[i], blackboard);
         }
     }
+    runUserInteractionTrees(blackboard);
 }

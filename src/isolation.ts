@@ -3,7 +3,7 @@ import {
     addAgent, setAgentVariable, addItem, addLocation, setVariable, getNextLocation, action,
     getRandNumber, getVariable, sequence, selector, execute, Precondition, getAgentVariable, neg_guard, guard,
     isVariableNotSet, displayDescriptionAction, userAction, addUserInteractionTree, initialize,
-    getUserInteractionObject, executeUserAction
+    getUserInteractionObject, executeUserAction, worldTick
 } from "./scripting";
 
 // 1. Define State
@@ -141,9 +141,7 @@ execute(search, alien, blackboard);*/
 // 3. Construct story
 // create user actions
 
-var startStateBT = guard(() => {
-    console.log(getVariable(playerLocation) == START); return getVariable(playerLocation) == START;
-    }, {},
+var startStateBT = guard(() => getVariable(playerLocation) == START, {},
     sequence([
             displayDescriptionAction("You enter the docking station."),
             userAction("Go forward to enter the corridor", () => setVariable(playerLocation, BC_CORRIDOR))
@@ -163,9 +161,9 @@ addUserInteractionTree(bcStateBT);
 var brStateBT = guard(() => getVariable(playerLocation) == BR_CORRIDOR, {},
     sequence([
             displayDescriptionAction("You move to the east in the corridor."),
-            userAction("Head west in the corridor", () => setVariable(playerLocation, BC_CORRIDOR)),
             userAction("Enter the staff quarters", () => setVariable(playerLocation, QUARTERS1)),
             userAction("Move north in the corridor", () => setVariable(playerLocation, MR_CORRIDOR)),
+            userAction("Head west in the corridor", () => setVariable(playerLocation, BC_CORRIDOR))
         ]
     ));
 addUserInteractionTree(brStateBT);
@@ -177,6 +175,100 @@ addUserInteractionTree(brStateBT);
 //4. Run the world
 initialize();
 var userInteractionObject = getUserInteractionObject();
-console.log("UIO: "+JSON.stringify(userInteractionObject));
-executeUserAction("Go forward to enter the corridor");
-console.log("playerLocation var: "+getVariable(playerLocation));
+
+//Rendering-----
+var displayPanel = {x: 500, y: 0};
+var textPanel = {x: 500, y: 350};
+var actionsPanel = {x: 520, y: 425};
+
+var canvas = <HTMLCanvasElement> document.getElementById('display');
+var context = canvas.getContext('2d');
+
+var spaceshipImage = new Image();
+spaceshipImage.onload = render;
+var playerImage = new Image();
+
+function render() {
+    context.drawImage(spaceshipImage, displayPanel.x, displayPanel.y, 500, 300);
+    playerImage.onload = displayPlayer;
+}
+var mapPositions = {
+    "START": {x: 230, y: 235},
+    "BC_CORRIDOR": {x: 240, y: 210},
+    "BR_CORRIDOR": {x: 300, y: 190},
+    "MR_CORRIDOR": {x: 305, y: 150},
+    "QUARTERS1": {x:340, y: 155},
+    "QUARTERS2": {x:340, y: 190},
+
+};
+function displayPlayer() {
+    var currLocation = "QUARTERS2";//getVariable(playerLocation);
+    context.drawImage(playerImage, displayPanel.x+mapPositions[currLocation].x, displayPanel.y+mapPositions[currLocation].y, 16, 16);
+}
+
+spaceshipImage.src = "../images/isolation_map.png";
+playerImage.src = "../images/player2.png";
+
+var currentSelection;
+var yOffset = actionsPanel.y + 25;
+var yOffsetIncrement = 50;
+
+function displayTextAndActions() {
+    context.clearRect(textPanel.x, textPanel.y, 500, 1000);
+    yOffset = actionsPanel.y + 25;
+
+    context.font = "20pt Calibri";
+    context.fillStyle = 'white';
+    context.fillText(userInteractionObject.text, textPanel.x, textPanel.y+20);
+
+    context.font = "15pt Calibri";
+    context.fillStyle = 'white';
+    for (var i = 0; i < userInteractionObject.userActionsText.length; i++) {
+        var userActionText = userInteractionObject.userActionsText[i];
+        context.fillText(userActionText, actionsPanel.x + 20, yOffset);
+        if (i == 0) {
+            currentSelection = i;
+        }
+        yOffset += yOffsetIncrement;
+    }
+
+    displayArrow();
+}
+
+function displayArrow() {
+    context.clearRect(actionsPanel.x, actionsPanel.y, 20, 1000);
+    context.fillText("> ", 520, actionsPanel.y + 25 + (currentSelection * yOffsetIncrement));
+}
+
+displayTextAndActions();
+
+//User input
+function keyPress(e) {
+    if (e.keyCode == 13) {
+        var selectedAction = userInteractionObject.userActionsText[currentSelection]
+        console.log(selectedAction);
+        executeUserAction(selectedAction);
+        worldTick();
+        displayTextAndActions();
+    }
+}
+
+function keyDown(e) {
+    if (e.keyCode == 40) {//down
+        if (userInteractionObject.userActionsText.length != 0) {
+            currentSelection++;
+            currentSelection = currentSelection % userInteractionObject.userActionsText.length;
+            displayArrow();
+        }
+    } else if (e.keyCode == 38) {//up
+        if (userInteractionObject.userActionsText.length != 0) {
+            currentSelection--;
+            if (currentSelection < 0)
+                currentSelection = userInteractionObject.userActionsText.length - 1;
+            displayArrow();
+        }
+    }
+}
+
+document.addEventListener("keypress", keyPress, false);
+document.addEventListener("keydown", keyDown, false);

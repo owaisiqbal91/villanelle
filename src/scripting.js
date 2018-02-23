@@ -201,7 +201,7 @@ var variables = {};
 var agentVariables = {};
 function setVariable(varName, value) {
     variables[varName] = value;
-    return value;
+    return varName;
 }
 exports.setVariable = setVariable;
 function setAgentVariable(agent, varName, value) {
@@ -247,34 +247,52 @@ exports.attachTreeToAgent = attachTreeToAgent;
 //TODO add variables to user action texts
 var userInteractionObject = {
     text: "",
-    userActions: {}
+    userActionsText: []
 };
-function runDisplayTrees() {
+var userInteractionTrees = [];
+var userActions = {};
+function runUserInteractionTrees(blackboard) {
     userInteractionObject.text = "";
-    userInteractionObject.userActions = {};
-    //TODO
+    userInteractionObject.userActionsText = [];
+    userActions = {}; //{"Go to location X" : effect
+    //TODO run the display trees
+    for (var i = 0; i < userInteractionTrees.length; i++) {
+        execute(userInteractionTrees[i], "interactionAgent", blackboard);
+    }
+    //TODO replace variables in text of description from variable set
+}
+function addUserAction(text, effect) {
+    //TODO replace variables in text of user actions from variable set (this could be done via user too)
+    userActions[text] = effect;
+    userInteractionObject.userActionsText.push(text);
 }
 exports.displayDescriptionAction = function (text) {
-    return action(function () { return true; }, function () { return userInteractionObject.text += "\n" + text; });
+    return action(function () { return true; }, function () { return userInteractionObject.text += "\n" + text; }, {}, 0);
 };
 exports.userAction = function (text, effect) {
-    return action(function () { return true; }, function () { return userInteractionObject.userActions[text] = effect; });
+    return action(function () { return true; }, function () { return addUserAction(text, effect); }, {}, 0);
 };
+function addUserInteractionTree(tick) {
+    userInteractionTrees.push(tick);
+}
+exports.addUserInteractionTree = addUserInteractionTree;
+function executeUserAction(text) {
+    //execute the user action
+    var userAction = userActions[text];
+    userAction();
+}
+exports.executeUserAction = executeUserAction;
 //4.
+var blackboard = {};
 function initialize() {
-    runDisplayTrees();
+    runUserInteractionTrees(blackboard);
 }
 exports.initialize = initialize;
-var blackboard = {};
+function getUserInteractionObject() {
+    return userInteractionObject;
+}
+exports.getUserInteractionObject = getUserInteractionObject;
 function worldTick(userActionText) {
-    if (!util_1.isUndefined(userActionText)) {
-        var userActionEffect = userInteractionObject.userActions[userActionText];
-        if (util_1.isUndefined(userActionEffect)) {
-            console.log("Error! Found no matching effect for userAction: " + userActionText);
-        }
-        userActionEffect();
-    }
-    runDisplayTrees();
     //all agent ticks
     for (var i = 0; i < agents.length; i++) {
         var tree = agentTrees[agents[i]];
@@ -282,5 +300,6 @@ function worldTick(userActionText) {
             execute(tree, agents[i], blackboard);
         }
     }
+    runUserInteractionTrees(blackboard);
 }
 exports.worldTick = worldTick;
