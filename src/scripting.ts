@@ -173,6 +173,21 @@ export function addLocation(locationName: string, adjacentLocations: string[]) {
     }
 }
 
+export function areAdjacent(location1: string, location2: string):boolean {
+    console.log("Are adjacent: " + location1 + ", "+location2);
+    if (locationGraph[location1] == undefined || locationGraph[location2] == undefined){
+        console.log("Either one/both locations undefined");
+        return false;
+    }
+
+    for (var i = 0; i < locationGraph[location1].length; i++) {
+        if (locationGraph[location1][i] == location2){
+            return true;
+        }
+    }
+    return false;
+}
+
 //pathfinding primitives
 export function getNextLocation(start: string, destination: string): string {
     var visited = {};
@@ -230,6 +245,7 @@ export function addItem(itemName: string) {
 //1.4 variables
 var variables = {};
 var agentVariables = {};
+var itemVariables = {};
 
 export function setVariable(varName: string, value: any) {
     variables[varName] = value;
@@ -268,6 +284,23 @@ export function isAgentVariableNotSet(agent: string, varName: string): boolean {
     return isUndefined(agentVariables[agent]) || isUndefined(agentVariables[agent][varName]);
 }
 
+export function setItemVariable(item: string, varName: string, value: any) {
+    if (isUndefined(itemVariables[item]))
+        itemVariables[item] = {};
+
+    itemVariables[item][varName] = value;
+    return value;
+}
+
+export function getItemVariable(item: string, varName: string) {
+    if (isUndefined(itemVariables[item]) || isUndefined(itemVariables[item][varName])) {
+        console.log("Variable " + varName + " for item " + item + " not set!")
+        return;
+    }
+    return itemVariables[item][varName];
+}
+
+
 //2
 //agent-behavior tree mapping
 var agentTrees = {};
@@ -281,7 +314,8 @@ export function attachTreeToAgent(agent: string, tree: Tick) {
 //TODO add variables to user action texts
 var userInteractionObject = {
     text: "",
-    userActionsText: []
+    userActionsText: [],
+    actionEffectsText: ""
 }
 var userInteractionTrees = [];
 var userActions = {};
@@ -309,6 +343,8 @@ export let displayDescriptionAction = (text: string) =>
         () => true,
         () => userInteractionObject.text += "\n" + text, {}, 0
     );
+export let displayActionEffectText = (text: string) => userInteractionObject.actionEffectsText += "\n" + text;
+
 export let userAction = (text: string, effect: () => any) =>
     action(
         () => true,
@@ -321,6 +357,7 @@ export function addUserInteractionTree(tick: Tick) {
 
 export function executeUserAction(text: string) {
     //execute the user action
+    userInteractionObject.actionEffectsText = "";
     var userAction = userActions[text];
     userAction();
 }
