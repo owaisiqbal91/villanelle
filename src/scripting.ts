@@ -12,25 +12,25 @@ function terminateAndReturn(id: number, blackboard: any, status: Status) {
     return status;
 }
 
-export type Effect = (params: any) => void
-export type Precondition = (params: any) => boolean
-export type Tick = (agent: string, blackboard: any) => Status
-export type ActionTick = (precondition: Precondition, effect: Effect, parameters?: any, ticksRequired?: number) => Tick
+export type Effect = () => void
+export type Precondition = () => boolean
+export type Tick = () => Status
+export type ActionTick = (precondition: Precondition, effect: Effect, ticksRequired?: number) => Tick
 /**
  * The guard tick is to add a precondition to the composite ticks
  */
-export type GuardTick = (precondition: Precondition, parameters: any, astTick: Tick, negate?: boolean) => Tick
+export type GuardTick = (precondition: Precondition, astTick: Tick, negate?: boolean) => Tick
 /**
  * Sequence/Selector
  */
 export type CompositeTick = (astTicks: Tick[]) => Tick
 
+var blackboard = {};
+
 function getActionTick(id: number): ActionTick {
-    return (precondition, effect, parameters = {}, ticksRequired = 1) => {
-        return (agent, blackboard) => {
-            parameters.agent = agent;
-            parameters.blackboard = blackboard;
-            if (precondition(parameters)) {
+    return (precondition, effect, ticksRequired = 1) => {
+        return () => {
+            if (precondition()) {
                 if (!blackboard[id]) {
                     blackboard[id] = {};
                     blackboard[id].ticksDone = ticksRequired;
@@ -40,7 +40,7 @@ function getActionTick(id: number): ActionTick {
                     blackboard[id].ticksDone--;
                     return Status.RUNNING;
                 } else {
-                    effect(parameters);
+                    effect();
                     return terminateAndReturn(id, blackboard, Status.SUCCESS);
                 }
             } else {
@@ -51,26 +51,24 @@ function getActionTick(id: number): ActionTick {
 }
 
 function getGuardTick(): GuardTick {
-    return (precondition, parameters, astTick, negate = false) => {
-        return (agent, blackboard) => {
-            parameters.agent = agent;
-            parameters.blackboard = blackboard;
-            let proceed = negate ? !precondition(parameters) : precondition(parameters);
-            return proceed ? execute(astTick, agent, blackboard) : Status.FAILURE;
+    return (precondition, astTick, negate = false) => {
+        return () => {
+            let proceed = negate ? !precondition() : precondition();
+            return proceed ? execute(astTick) : Status.FAILURE;
         }
     }
 }
 
 function getSequenceTick(id: number): CompositeTick {
     return (astTicks) => {
-        return (agent, blackboard) => {
+        return () => {
             if (!blackboard[id]) {
                 blackboard[id] = {};
                 blackboard[id].currentIndex = 0;
             }
 
             while (blackboard[id].currentIndex < astTicks.length) {
-                var childStatus = execute(astTicks[blackboard[id].currentIndex], agent, blackboard);
+                var childStatus = execute(astTicks[blackboard[id].currentIndex]);
 
                 if (childStatus == Status.RUNNING)
                     return Status.RUNNING;
@@ -86,14 +84,14 @@ function getSequenceTick(id: number): CompositeTick {
 
 function getSelectorTick(id: number): CompositeTick {
     return (astTicks) => {
-        return (agent, blackboard) => {
+        return () => {
             if (!blackboard[id]) {
                 blackboard[id] = {};
                 blackboard[id].currentIndex = 0;
             }
 
             while (blackboard[id].currentIndex < astTicks.length) {
-                var childStatus = execute(astTicks[blackboard[id].currentIndex], agent, blackboard);
+                var childStatus = execute(astTicks[blackboard[id].currentIndex]);
 
                 if (childStatus == Status.RUNNING)
                     return Status.RUNNING;
@@ -107,22 +105,22 @@ function getSelectorTick(id: number): CompositeTick {
     }
 }
 
-export function execute(astTick: Tick, agent: string, blackboard: any): Status {
-    return astTick(agent, blackboard);
+export function execute(astTick: Tick): Status {
+    return astTick();
 }
 
 var globalIdCounter = 0;
 
-export function action(precondition: Precondition, effect: Effect, params?: any, ticksRequired?: number): Tick {
-    return getActionTick(globalIdCounter++)(precondition, effect, params, ticksRequired)
+export function action(precondition: Precondition, effect: Effect, ticksRequired?: number): Tick {
+    return getActionTick(globalIdCounter++)(precondition, effect, ticksRequired)
 }
 
-export function guard(precondition: Precondition, params: any, astTick: Tick): Tick {
-    return getGuardTick()(precondition, params, astTick);
+export function guard(precondition: Precondition, astTick: Tick): Tick {
+    return getGuardTick()(precondition, astTick);
 }
 
-export function neg_guard(precondition: Precondition, params: any, astTick: Tick): Tick {
-    return getGuardTick()(precondition, params, astTick, true);
+export function neg_guard(precondition: Precondition, astTick: Tick): Tick {
+    return getGuardTick()(precondition, astTick, true);
 }
 
 /**
@@ -146,7 +144,7 @@ export function selector(astTicks: Tick[]): Tick {
 }
 
 
-/*--------------- API --------------- */
+/*--------------- APIs --------------- */
 
 //0. utilities
 // min and max are inclusive
@@ -320,36 +318,37 @@ var userInteractionObject = {
 var userInteractionTrees = [];
 var userActions = {};
 
-function runUserInteractionTrees(blackboard) {
+function runUserInteractionTrees() {
     userInteractionObject.text = "";
     userInteractionObject.userActionsText = [];
     userActions = {};//{"Go to location X" : effect
-    //TODO run the display trees
     for (var i = 0; i < userInteractionTrees.length; i++) {
-        execute(userInteractionTrees[i], "interactionAgent", blackboard);
+        execute(userInteractionTrees[i]);
     }
-
-    //TODO replace variables in text of description from variable set
-}
-
-function addUserAction(text: string, effect: () => any) {
-    //TODO replace variables in text of user actions from variable set (this could be done via user too)
-    userActions[text] = effect;
-    userInteractionObject.userActionsText.push(text);
 }
 
 export let displayDescriptionAction = (text: string) =>
     action(
         () => true,
-        () => userInteractionObject.text += "\n" + text, {}, 0
+        () => userInteractionObject.text += "\n" + text, 0
     );
 export let displayActionEffectText = (text: string) => userInteractionObject.actionEffectsText += "\n" + text;
 
-export let userAction = (text: string, effect: () => any) =>
+export let addUserActionTree = (text: string, effectTree: Tick) => action(
+    () => true,
+    () => mapUserActionToTree(text, effectTree), 0
+);
+
+export let addUserAction = (text: string, effect: () => any) =>
     action(
         () => true,
-        () => addUserAction(text, effect), {}, 0
+        () => mapUserActionToTree(text, action(()=>true, effect, 0)), 0
     );
+
+function mapUserActionToTree(text: string, tree: Tick) {
+    userActions[text] = tree;
+    userInteractionObject.userActionsText.push(text);
+}
 
 export function addUserInteractionTree(tick: Tick) {
     userInteractionTrees.push(tick);
@@ -358,28 +357,27 @@ export function addUserInteractionTree(tick: Tick) {
 export function executeUserAction(text: string) {
     //execute the user action
     userInteractionObject.actionEffectsText = "";
-    var userAction = userActions[text];
-    userAction();
+    var userActionEffectTree = userActions[text];
+    execute(userActionEffectTree);
 }
 
 //4.
-var blackboard = {};
-
 export function initialize() {
-    runUserInteractionTrees(blackboard);
+    runUserInteractionTrees();
 }
 
 export function getUserInteractionObject() {
     return userInteractionObject;
 }
 
-export function worldTick(userActionText?: string) {
+export function worldTick() {
     //all agent ticks
     for (var i = 0; i < agents.length; i++) {
         var tree = agentTrees[agents[i]];
         if (!isUndefined(tree)) {
-            execute(tree, agents[i], blackboard);
+            setVariable("executingAgent", agents[i]);
+            execute(tree);
         }
     }
-    runUserInteractionTrees(blackboard);
+    runUserInteractionTrees();
 }
