@@ -1,0 +1,41 @@
+{
+  "name": "villanelle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "browserify": "^16.1.0",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.8",
+    "gulp-typescript": "^4.0.1",
+    "tsify": "^3.0.4",
+    "typescript": "^2.7.2",
+    "typescript-collections": "^1.3.2",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.10.0"
+  },
+  "devDependencies": {
+    "browserify": "^16.1.1",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^4.0.2",
+    "gulp-util": "^3.0.8",
+    "tsify": "^3.0.4",
+    "typescript": "^2.8.1",
+    "typescript-collections": "^1.3.2",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owaisiqbal91/villanelle.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/owaisiqbal91/villanelle/issues"
+  },
+  "homepage": "https://github.com/owaisiqbal91/villanelle#readme"
+}
