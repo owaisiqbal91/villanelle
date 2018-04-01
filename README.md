@@ -41,7 +41,7 @@ gulp is used to streamline our build process which is specified in gulpfile.js. 
 If you want to run typescript individually on files in order to check the exact compiler errors, you would first have to install typescript globally:
 
 ```
-npm-install -g typescript
+npm install -g typescript
 ```
 
 You can then enter the source folder and run the tsc command on any typescript file:
