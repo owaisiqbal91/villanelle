@@ -232,7 +232,8 @@ var xml_text = Blockly.Xml.domToText(xml);
     demoWorkspace.registerButtonCallback("addAgentPressed", promptAgentName);
      function promptAgentName(){
       var agentName = prompt("New agent name:");
-      agentsDropdown.push([agentName, agentName]);
+      if(agentName != undefined && agentName != "")
+        agentsDropdown.push([agentName, agentName]);
     }
 
     demoWorkspace.registerToolboxCategoryCallback('AGENTS', agentsPopulateCallback);
