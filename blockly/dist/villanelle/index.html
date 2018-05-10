@@ -1,0 +1,261 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Villanelle</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <script src="../../blocks/bt_blocks.js"></script>
+  <script src="../../generators/villanelle/villanelle_generation.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      background-color: #03120E;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 150%;
+      color: #DDDDDD;
+      font-family: bookman;
+    }
+    table {
+      height: 100%;
+      width: 100%;
+    }
+    #blocklyArea {
+      height: 99%;
+    }
+    .blocklySvg {
+      background-color: #1A1D1A;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td>
+        <h1><center>Villanelle</center></h1>
+      </td>
+    </tr>
+    <tr>
+      <td id="blocklyArea">
+      </td>
+    </tr>
+  </table>
+
+  <div id="blocklyDiv" style="position: absolute"></div>
+
+  <xml id="toolbox" style="display: none;">
+  <category name="Variables" colour="#a56d5b" custom="VARIABLE"></category>
+  <category name="Math" colour="#5C68A6">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+    <block type="math_number_property">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">EVEN</field>
+      <value name="NUMBER_TO_CHECK">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_arithmetic">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_modulo">
+      <value name="DIVIDEND">
+        <shadow type="math_number">
+          <field name="NUM">64</field>
+        </shadow>
+      </value>
+      <value name="DIVISOR">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constrain">
+      <value name="VALUE">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="LOW">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="HIGH">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="Text" colour="#5CA68D">
+    <block type="text">
+      <field name="TEXT"></field>
+    </block>
+    <block type="text_join">
+      <mutation items="2"></mutation>
+    </block>
+  </category>
+  <sep></sep>
+  <category name="Agents" colour="#00000" custom="AGENTS">
+  </category>
+  <sep></sep>
+  <category name="Precondition">
+    <block type="preconditionvaluecheck">
+      <field name="Operator">=</field>
+    </block>
+    <block type="preconditionexpressioncheck">
+      <field name="Operator">and</field>
+    </block>
+    <block type="preconditionnot"></block>
+    <block type="preconditionbool">
+      <field name="bool">true</field>
+    </block>
+  </category>
+  <category name="Action">
+    <block type="action">
+      <field name="TicksRequired">1</field>
+    </block>
+  </category>
+  <category name="Composite">
+    <block type="sequence"></block>
+    <block type="selector"></block>
+    <block type="guard"></block>
+  </category>
+  <sep></sep>
+  <category name="User Interaction" colour="#123456">
+  <block type="adduserinteractiontree"></block>
+  <block type="displaydescriptionaction"></block>
+  <block type="adduseractiontree"></block>
+  <block type="displayactioneffecttext"></block>
+  </category>
+</xml>
+
+<!-- Saving user work, replace this xml by the text generated from the following (remember to add id="userwork" separately)
+var xml = Blockly.Xml.workspaceToDom(demoWorkspace);
+var xml_text = Blockly.Xml.domToText(xml);
+-->
+  <xml id = "userwork" xmlns="http://www.w3.org/1999/xhtml"><variables><variable type="" id="{ZWkyH%$gd[os5EKJ]vw">Strength</variable><variable type="" id="GL3HkK:[b}PpRai.y3NE">Intelligence</variable><variable type="" id="]wOR%KCDs},E/bs3OQD]">BellaLikesYou</variable><variable type="" id="AcuNu}8Rfn{5TvrE`Zq1">BellaAsked</variable><variable type="" id="8kgi@_TNYaSJ|/X]b^zO">DateFound</variable><variable type="" id="O}dULWOw4n9nkqcpEGK(">JacobineLikesYou</variable><variable type="" id="4rU_DFF9{!yU|kz!K1vi">JacobineAsked</variable><variable type="" id="h,S.WN):bCWH,qMh![`*">Fangs</variable><variable type="" id="fVH`k!Y}4_TI5F%16=?k">Fur</variable><variable type="" id=",WQKj}S4nIID={xt$73-">SharpenTeethAction</variable><variable type="" id="^In^HwnF_bNn4Xa([Ta?">TransplantHairAction</variable></variables><block type="variables_set" id="pZ2*J8?]MioQ;bMfVL]#" x="120" y="-975"><field name="VAR" id="{ZWkyH%$gd[os5EKJ]vw" variabletype="">Strength</field><value name="VALUE"><block type="math_number" id="Ao2x:!/d4k,;4FNy!se["><field name="NUM">0</field></block></value><next><block type="variables_set" id="@.[,R!iL#R^$S!$h!I_#"><field name="VAR" id="GL3HkK:[b}PpRai.y3NE" variabletype="">Intelligence</field><value name="VALUE"><block type="math_number" id="C_._bujIV~^m[q[tZ@?_"><field name="NUM">0</field></block></value><next><block type="variables_set" id="yepKu*]!vS7;UVSAi{H/"><field name="VAR" id="]wOR%KCDs},E/bs3OQD]" variabletype="">BellaLikesYou</field><value name="VALUE"><block type="preconditionbool" id="561r6dEw)LG(1)U~y6;."><field name="bool">false</field></block></value><next><block type="variables_set" id=";$6o.QWRH.cSlS8O7g}!"><field name="VAR" id="AcuNu}8Rfn{5TvrE`Zq1" variabletype="">BellaAsked</field><value name="VALUE"><block type="preconditionbool" id="Yae^=Jyem+^;}8Oc+yDN"><field name="bool">false</field></block></value><next><block type="variables_set" id="FMXygB)*W]ro2/Ap-DTE"><field name="VAR" id="O}dULWOw4n9nkqcpEGK(" variabletype="">JacobineLikesYou</field><value name="VALUE"><block type="preconditionbool" id="`m#ANpsFjh,Cwb9dJ;PI"><field name="bool">false</field></block></value><next><block type="variables_set" id="p+xS%.vnx(~F{nsl{86)"><field name="VAR" id="4rU_DFF9{!yU|kz!K1vi" variabletype="">JacobineAsked</field><value name="VALUE"><block type="preconditionbool" id="n_if3A=z#|%WC`jw,MDI"><field name="bool">false</field></block></value><next><block type="variables_set" id="aTW$Z-iweal%x@XxVjVZ"><field name="VAR" id="h,S.WN):bCWH,qMh![`*" variabletype="">Fangs</field><value name="VALUE"><block type="preconditionbool" id="h*[hzrym$}TIDf7vSjQY"><field name="bool">false</field></block></value><next><block type="variables_set" id="{5vrP,8;8w@=~t%5jq+x"><field name="VAR" id="fVH`k!Y}4_TI5F%16=?k" variabletype="">Fur</field><value name="VALUE"><block type="preconditionbool" id="fg_6{4{*7I-P-rnD5pt."><field name="bool">false</field></block></value><next><block type="variables_set" id="TRtk)^W7Y4O)vOp^$JLH"><field name="VAR" id=",WQKj}S4nIID={xt$73-" variabletype="">SharpenTeethAction</field><value name="VALUE"><block type="preconditionbool" id="bn(}]ieYoq]:u0QY#qD`"><field name="bool">false</field></block></value><next><block type="variables_set" id="rj6CYfM[xE!`4diM,5uM"><field name="VAR" id="^In^HwnF_bNn4Xa([Ta?" variabletype="">TransplantHairAction</field><value name="VALUE"><block type="preconditionbool" id="3}}~F?3Z=b@j)pq=!%6X"><field name="bool">false</field></block></value><next><block type="variables_set" id="~/l?#LBu[+Px!qMm:7:4"><field name="VAR" id="8kgi@_TNYaSJ|/X]b^zO" variabletype="">DateFound</field><value name="VALUE"><block type="preconditionbool" id="$B4q0Uig!)%j}s-GNZYT"><field name="bool">false</field></block></value></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block><block type="attachtree" id="8_66uAAp#1?FtbvDI$bd" x="128" y="-629"><field name="AGENTNAMES">Bella</field><statement name="TREE"><block type="selector" id="0gf%BSb^qNf8Bp0*o7em"><statement name="Ticks"><block type="action" id="T6xr1Z:CiPX-p=SgyV%="><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionexpressioncheck" id="rRe/Q_y$[w0U]J8?};_$"><field name="Operator">and</field><value name="Operand1"><block type="preconditionvaluecheck" id="RvIpClRWd8rwuK~f@bn5"><field name="Operator">&gt;=</field><value name="Operand1"><block type="variables_get" id="3Tz|0V9C%n(-yQEoB]l5"><field name="VAR" id="GL3HkK:[b}PpRai.y3NE" variabletype="">Intelligence</field></block></value><value name="Operand2"><block type="math_number" id="stJH?Z.kuRAwR6.PCHW{"><field name="NUM">4</field></block></value></block></value><value name="Operand2"><block type="preconditionvaluecheck" id="sI|oh_EpQf@e2hK.`vu/"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="0`Q6|K{}+yA_*nts?tlj"><field name="VAR" id="h,S.WN):bCWH,qMh![`*" variabletype="">Fangs</field></block></value><value name="Operand2"><block type="preconditionbool" id="|tfmx;3-6I/+b;%DKcKl"><field name="bool">true</field></block></value></block></value></block></value><statement name="Effect"><block type="variables_set" id="$ZNv9Lp-;?5n}]r7/[{Q"><field name="VAR" id="]wOR%KCDs},E/bs3OQD]" variabletype="">BellaLikesYou</field><value name="VALUE"><block type="preconditionbool" id="J;q174nitt~MdA^5I.]L"><field name="bool">true</field></block></value></block></statement><next><block type="guard" id="_?W}(7M!_E4WQo7%b]m#"><value name="Precondition"><block type="preconditionvaluecheck" id="@?3Jct.5A,[}EtBIQLv;"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="D`pZ7D9mVX`*Kpm)^![#"><field name="VAR" id="AcuNu}8Rfn{5TvrE`Zq1" variabletype="">BellaAsked</field></block></value><value name="Operand2"><block type="preconditionbool" id="}#:`hVpp10p=MG_fj6rT"><field name="bool">true</field></block></value></block></value><statement name="RunTick"><block type="selector" id="{N}/IOU$W29dqgj0$V6e"><statement name="Ticks"><block type="action" id="hCP#sHc2^*UHOt@8bq:x"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="J?/9QYBH1Ox[?w`X@RTL"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="|]i!Z}c)kf/s^^BAg=nP"><field name="VAR" id="h,S.WN):bCWH,qMh![`*" variabletype="">Fangs</field></block></value><value name="Operand2"><block type="preconditionbool" id="o2?NH|.lTUH%;#lX%N*P"><field name="bool">false</field></block></value></block></value><statement name="Effect"><block type="displayactioneffecttext" id="V?G~8~:WX$jo-HDYPetE"><value name="TEXT"><block type="text" id="Er0s4;97)pea0DaYWp0/"><field name="TEXT">"Ew, you don't even have fangs.."</field></block></value><next><block type="variables_set" id="ZU1Iu@tNv.X[3p-E~O6x"><field name="VAR" id=",WQKj}S4nIID={xt$73-" variabletype="">SharpenTeethAction</field><value name="VALUE"><block type="preconditionbool" id="KK*[D=h`k`I1U^2`Hn!@"><field name="bool">true</field></block></value><next><block type="variables_set" id="+(AHp0}cUNru%%4.={AI"><field name="VAR" id="AcuNu}8Rfn{5TvrE`Zq1" variabletype="">BellaAsked</field><value name="VALUE"><block type="preconditionbool" id="M0#XH5Yy:I9Bcw^,b9e}"><field name="bool">false</field></block></value></block></next></block></next></block></statement><next><block type="action" id="-qt/%#fr;*II7Ut5J0an"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="$g/1G$Lt1!Zf8M?`9jXY"><field name="Operator">&lt;</field><value name="Operand1"><block type="variables_get" id="$^r`8Xh$I*3h^??*j$p7"><field name="VAR" id="GL3HkK:[b}PpRai.y3NE" variabletype="">Intelligence</field></block></value><value name="Operand2"><block type="math_number" id="czw$^?f}i9?{S08+PT1S"><field name="NUM">4</field></block></value></block></value><statement name="Effect"><block type="displayactioneffecttext" id="tH$f$nvMwpZ,FKi.`YmR"><value name="TEXT"><block type="text" id="P;5?uEGY~Y*L{}cB2s)w"><field name="TEXT">"Sorry, I only like intelligent guys.."</field></block></value><next><block type="variables_set" id="cW^m*KJi+q5YpF5*|X5L"><field name="VAR" id="AcuNu}8Rfn{5TvrE`Zq1" variabletype="">BellaAsked</field><value name="VALUE"><block type="preconditionbool" id="G)nQ~Kf%2t_G;8x!@}SR"><field name="bool">false</field></block></value></block></next></block></statement></block></next></block></statement></block></statement></block></next></block></statement></block></statement></block><block type="attachtree" id="wc;;F((F1`Z5vF*?82fk" x="127" y="-71"><field name="AGENTNAMES">Jacobine</field><statement name="TREE"><block type="selector" id="}wE.5lQfr]gox;LD8h8G"><statement name="Ticks"><block type="action" id="4/3mK+Zk?7[*d6pE0_bl"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionexpressioncheck" id="6C[gRum.Z^e@!5+sF{k)"><field name="Operator">and</field><value name="Operand1"><block type="preconditionvaluecheck" id="gi;(?qO.GfZ|qzBI?yZZ"><field name="Operator">&gt;=</field><value name="Operand1"><block type="variables_get" id="ks/A,F{%m{JNF!Q0}X/P"><field name="VAR" id="{ZWkyH%$gd[os5EKJ]vw" variabletype="">Strength</field></block></value><value name="Operand2"><block type="math_number" id="nZ8HMs#/*zm^FU#4RYn4"><field name="NUM">4</field></block></value></block></value><value name="Operand2"><block type="preconditionvaluecheck" id="ib3f8fHF2OxN+]vs1v|p"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="@gU?J|{tWDc!k$)*a1DS"><field name="VAR" id="fVH`k!Y}4_TI5F%16=?k" variabletype="">Fur</field></block></value><value name="Operand2"><block type="preconditionbool" id="8w_c5+bo;kCt=i=5ScDF"><field name="bool">true</field></block></value></block></value></block></value><statement name="Effect"><block type="variables_set" id="XCox9fRt(ICc~L/Oh+}T"><field name="VAR" id="O}dULWOw4n9nkqcpEGK(" variabletype="">JacobineLikesYou</field><value name="VALUE"><block type="preconditionbool" id="p{#5sq3!uw-dq,Xe;^`t"><field name="bool">true</field></block></value></block></statement><next><block type="guard" id="^VY-rF-jZKOwWxCs/;0S"><value name="Precondition"><block type="preconditionvaluecheck" id="8#:/fw]yd4mWMJ?ySBG!"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="[Y3KHA(jm6K{.fe)#Jr,"><field name="VAR" id="4rU_DFF9{!yU|kz!K1vi" variabletype="">JacobineAsked</field></block></value><value name="Operand2"><block type="preconditionbool" id="WJ6?kL4H9OE3^*9Mk4H~"><field name="bool">true</field></block></value></block></value><statement name="RunTick"><block type="selector" id="]wf7JO})}=envLdG-YI7"><statement name="Ticks"><block type="action" id=".]*t4Fc8jpa#%Gj3mz3l"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="#WXQP3eCFoNtDMy9;XSp"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="O,QPI0MD5]N|aThSyj!Y"><field name="VAR" id="fVH`k!Y}4_TI5F%16=?k" variabletype="">Fur</field></block></value><value name="Operand2"><block type="preconditionbool" id="ixvwlh]/W#^M`b9usOp:"><field name="bool">false</field></block></value></block></value><statement name="Effect"><block type="displayactioneffecttext" id="*tcr/;C6@@R_kr,)8a:E"><value name="TEXT"><block type="text" id="l0E[b6}br=k_mb%(`)~_"><field name="TEXT">"I'm more of a furry type of person.."</field></block></value><next><block type="variables_set" id="iWgZ1HdH]Eu+Ui65}Yji"><field name="VAR" id="^In^HwnF_bNn4Xa([Ta?" variabletype="">TransplantHairAction</field><value name="VALUE"><block type="preconditionbool" id="V{HL7Fp}fx(,HT=RuKmb"><field name="bool">true</field></block></value><next><block type="variables_set" id="vvyzPK#1^toEfT]N,PdN"><field name="VAR" id="4rU_DFF9{!yU|kz!K1vi" variabletype="">JacobineAsked</field><value name="VALUE"><block type="preconditionbool" id="@?B@_Nz-.HVd^c#xm=5m"><field name="bool">false</field></block></value></block></next></block></next></block></statement><next><block type="action" id="MmDn+$v0+_PK5chCX+7_"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="?(n?5G]dO,|,vFxv$Q#!"><field name="Operator">&lt;</field><value name="Operand1"><block type="variables_get" id="]M6}Zx07~Nx+Q,U$@LT{"><field name="VAR" id="{ZWkyH%$gd[os5EKJ]vw" variabletype="">Strength</field></block></value><value name="Operand2"><block type="math_number" id=";RlQ;U*uw#1MJh8rF.Re"><field name="NUM">4</field></block></value></block></value><statement name="Effect"><block type="displayactioneffecttext" id="|j@[L7nRx-RNI,.tiNo?"><value name="TEXT"><block type="text" id="c`:%rr*yj(j_;p0eb@tt"><field name="TEXT">"You are kinda weak.."</field></block></value><next><block type="variables_set" id="R.mGoBk+vdMfaCTVFS{x"><field name="VAR" id="4rU_DFF9{!yU|kz!K1vi" variabletype="">JacobineAsked</field><value name="VALUE"><block type="preconditionbool" id="`ws(eSGk{X7v9~@d*j1?"><field name="bool">false</field></block></value></block></next></block></statement></block></next></block></statement></block></statement></block></next></block></statement></block></statement></block><block type="adduserinteractiontree" id="):=*;I@JJv449Hmp.O9e" x="126" y="497"><statement name="USERTREE"><block type="guard" id="}nFCVGA,N=6*~Te{:^I~"><value name="Precondition"><block type="preconditionvaluecheck" id="ys0@^_n{gM=[qS3.1c.g"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="U1U?=T]]VJzXNp1pOxsb"><field name="VAR" id="8kgi@_TNYaSJ|/X]b^zO" variabletype="">DateFound</field></block></value><value name="Operand2"><block type="preconditionbool" id="#~%C/#d@l#0nu{@6O8VW"><field name="bool">false</field></block></value></block></value><statement name="RunTick"><block type="sequence" id="8kIGOzOGP}b?!b-eQh)Z"><statement name="Ticks"><block type="displaydescriptionaction" id="{Bk`pOxwV)8J(%F5ptvL"><value name="DESCRIPTIONACTION"><block type="text" id="P9IEAl9R8%LN(wPv{;;J"><field name="TEXT">Prom is approaching! You need to have a date! Bella or Jacobine...</field></block></value><next><block type="adduseractiontree" id="Iuct3nnf*xuT?zgB4lJ^"><value name="TEXT"><block type="text" id="{uEha6$oegY{Rb*#grQ-"><field name="TEXT">Ask Bella the Vampire to Prom</field></block></value><statement name="TREE"><block type="selector" id="Tnx8KW@V^pOf8SY#}s:?"><statement name="Ticks"><block type="action" id="!5UM*Xw=V@t2NU~e=$T["><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="tWYpo`G=i6DEj=Q3Mwo0"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="1:5:5PZ]1YXq}d~u4B6x"><field name="VAR" id="]wOR%KCDs},E/bs3OQD]" variabletype="">BellaLikesYou</field></block></value><value name="Operand2"><block type="preconditionbool" id="0/gB~18kUAwr~y_toW4^"><field name="bool">true</field></block></value></block></value><statement name="Effect"><block type="displayactioneffecttext" id="[xfotGw2i+?:ER`(@@-`"><value name="TEXT"><block type="text" id="n21xxH~a8:58f`;!?vEv"><field name="TEXT">Bella swoons and turns into a bat. Congratulations, you have a date! </field></block></value><next><block type="variables_set" id="-AflXgRU7W98f9XQPan2"><field name="VAR" id="8kgi@_TNYaSJ|/X]b^zO" variabletype="">DateFound</field><value name="VALUE"><block type="preconditionbool" id="O--phpgAUwJb?Xm(PKe-"><field name="bool">true</field></block></value></block></next></block></statement><next><block type="action" id="idTxg!-.wU-xq6o*3`2@"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="`}Rd01Ha1#SZ@zc-/IJ+"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="*Wv3fO=oiuYmm5GC6g`}"><field name="VAR" id="]wOR%KCDs},E/bs3OQD]" variabletype="">BellaLikesYou</field></block></value><value name="Operand2"><block type="preconditionbool" id="ONB]q=*2rliza^P[zv#,"><field name="bool">false</field></block></value></block></value><statement name="Effect"><block type="variables_set" id="koi~Yw1_4zf+JX(YYeiQ"><field name="VAR" id="AcuNu}8Rfn{5TvrE`Zq1" variabletype="">BellaAsked</field><value name="VALUE"><block type="preconditionbool" id="bC4h2J`ipJBZ!W[J6ZUS"><field name="bool">true</field></block></value></block></statement></block></next></block></statement></block></statement><next><block type="adduseractiontree" id="ug/V}o*?yP%TT!n;[S!p"><value name="TEXT"><block type="text" id="yP~~JR(k}LzzlxZRot1;"><field name="TEXT">Ask Jacobine the Werewolf to Prom</field></block></value><statement name="TREE"><block type="selector" id="lW+z*!5}WN[H{Ix,yH6R"><statement name="Ticks"><block type="action" id="0#1#0QjK)/rrNJ!NK3rY"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="QP+c8Em[8cv.9^V7.6Rt"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="U9Yj+jPZa,9/{A(Ls@kY"><field name="VAR" id="O}dULWOw4n9nkqcpEGK(" variabletype="">JacobineLikesYou</field></block></value><value name="Operand2"><block type="preconditionbool" id="m7BPr30kVIOjjAZR^5xz"><field name="bool">true</field></block></value></block></value><statement name="Effect"><block type="displayactioneffecttext" id="jqu0Pk;KM.phcJlF{/72"><value name="TEXT"><block type="text" id=":U`QLw=#XHMbj%b[p:jR"><field name="TEXT">Jacobine gives a nasty snarl. That means yes in werewolf-speak. Congratulations!</field></block></value><next><block type="variables_set" id="--evDlT$Xocqp8VbL,+U"><field name="VAR" id="8kgi@_TNYaSJ|/X]b^zO" variabletype="">DateFound</field><value name="VALUE"><block type="preconditionbool" id="f~UnigcQpswv-]C[g2Ji"><field name="bool">true</field></block></value></block></next></block></statement><next><block type="action" id="Z`az@,Id/jK9uchr^?j*"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionvaluecheck" id="mg$N8;44MV]^Wzc@J/Q0"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="p:!/:zmVOa?6%IkLuLHn"><field name="VAR" id="O}dULWOw4n9nkqcpEGK(" variabletype="">JacobineLikesYou</field></block></value><value name="Operand2"><block type="preconditionbool" id="0.AQfm[[bp%9/8p6*aEN"><field name="bool">false</field></block></value></block></value><statement name="Effect"><block type="variables_set" id="cgKk=TN^Wso@EOz-22oz"><field name="VAR" id="4rU_DFF9{!yU|kz!K1vi" variabletype="">JacobineAsked</field><value name="VALUE"><block type="preconditionbool" id=",[(b/IO`8k#ggxq46?Q."><field name="bool">true</field></block></value></block></statement></block></next></block></statement></block></statement><next><block type="adduseractiontree" id="X`PZJYA/5:@4[*=@T2I{"><value name="TEXT"><block type="text" id="]/#+pcx-8m(ITN97@WjP"><field name="TEXT">Hit the gym</field></block></value><statement name="TREE"><block type="action" id="y:z}+;fX@N8{ikSRI{.w"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionbool" id="fZohQgHtUV!//EV*pV8%"><field name="bool">true</field></block></value><statement name="Effect"><block type="math_change" id="3fSM*o/iBQcpp3`rH1(k"><field name="VAR" id="{ZWkyH%$gd[os5EKJ]vw" variabletype="">Strength</field><value name="DELTA"><shadow type="math_number" id="Rm.U4ASFXqMWity*h!FY"><field name="NUM">1</field></shadow><block type="math_number" id="Q7EhLl8*AMaXj,a}ueqI"><field name="NUM">2</field></block></value><next><block type="displayactioneffecttext" id="u,9}vq.Oy[19;YuROX}w"><value name="TEXT"><block type="text_join" id="*#1a[aqXBYeJC~|GXRqn"><mutation items="3"></mutation><value name="ADD0"><block type="text" id="t9?2{tEyBF[JGDTT(Q,*"><field name="TEXT">You strength improves to </field></block></value><value name="ADD1"><block type="variables_get" id="kdVM{k$diF.Pco)N~DxE"><field name="VAR" id="{ZWkyH%$gd[os5EKJ]vw" variabletype="">Strength</field></block></value><value name="ADD2"><block type="text" id="eP|xrA%TjJ[A$0HV,`pX"><field name="TEXT"> (+2)</field></block></value></block></value></block></next></block></statement></block></statement><next><block type="adduseractiontree" id="n)WM4+e4CW`,T*NKVoG!"><value name="TEXT"><block type="text" id="DRgrOg0p=hZi8zOz{9YB"><field name="TEXT">Hit the library</field></block></value><statement name="TREE"><block type="action" id="y-vrYVCBt%FXqf7[huz="><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionbool" id="k}rq5.Gw`*(Ook6~%BHJ"><field name="bool">true</field></block></value><statement name="Effect"><block type="math_change" id="4ix6y4FhrlXVK9IpAN-|"><field name="VAR" id="GL3HkK:[b}PpRai.y3NE" variabletype="">Intelligence</field><value name="DELTA"><shadow type="math_number" id="Rm.U4ASFXqMWity*h!FY"><field name="NUM">1</field></shadow><block type="math_number" id="RBX!eC9~eiOc!YBC/W$C"><field name="NUM">2</field></block></value><next><block type="displayactioneffecttext" id=",N:uHN9_jkn]s-kbD0Kr"><value name="TEXT"><block type="text_join" id="=e-W/HBI*0I(#KS(?HOZ"><mutation items="3"></mutation><value name="ADD0"><block type="text" id="6rm0EQV0j_{vY;=(JFul"><field name="TEXT">Your intelligence improves to </field></block></value><value name="ADD1"><block type="variables_get" id="xHNLmv06=3Qcg!B6cJK?"><field name="VAR" id="GL3HkK:[b}PpRai.y3NE" variabletype="">Intelligence</field></block></value><value name="ADD2"><block type="text" id=".kF6Kx^W8gE8q1`dRY`4"><field name="TEXT"> (+2)</field></block></value></block></value></block></next></block></statement></block></statement><next><block type="selector" id="Ko[t^5)q!u9k9Q[@2Z_k"><statement name="Ticks"><block type="guard" id="~Ul.@Oa`(Bg%ucYvIHH."><value name="Precondition"><block type="preconditionvaluecheck" id="o!T%]1gC|vjZIwngm8^K"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="IR2KdYnm_zD85A_qBm7t"><field name="VAR" id=",WQKj}S4nIID={xt$73-" variabletype="">SharpenTeethAction</field></block></value><value name="Operand2"><block type="preconditionbool" id="mJ2a6+,fvp;[2pcneUCn"><field name="bool">true</field></block></value></block></value><statement name="RunTick"><block type="adduseractiontree" id="AvQg}[r|Je-dNHXsnw9("><value name="TEXT"><block type="text" id="DS8n?[U9}#LRuwC9vh2d"><field name="TEXT">Sharpen your teeth</field></block></value><statement name="TREE"><block type="action" id="CSCy@-9[Mbqq.I_iC`~2"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionbool" id="g|3E2-XhORCyW`@E_dSQ"><field name="bool">true</field></block></value><statement name="Effect"><block type="displayactioneffecttext" id="{ab=HLRCh5?(*}]ICK9H"><value name="TEXT"><block type="text" id="kshAME$A|)xnT8UV{Bh8"><field name="TEXT">You sharpen your teeth into makeshift fangs.</field></block></value><next><block type="variables_set" id="oK80wY}Kl)@J_A?eZ4;`"><field name="VAR" id="h,S.WN):bCWH,qMh![`*" variabletype="">Fangs</field><value name="VALUE"><block type="preconditionbool" id="pr0*NuAL-*6]Eyh)n_Lx"><field name="bool">true</field></block></value><next><block type="variables_set" id="AKS,K1,u-+O%xpkP$N]j"><field name="VAR" id=",WQKj}S4nIID={xt$73-" variabletype="">SharpenTeethAction</field><value name="VALUE"><block type="preconditionbool" id=";xIU]im_L+wL,rdjOZqu"><field name="bool">false</field></block></value></block></next></block></next></block></statement></block></statement></block></statement><next><block type="action" id="b[:E[slK`vtVETNy/ZK+"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionbool" id=":M5$|fbj(+Ps=Hf4S3pY"><field name="bool">true</field></block></value></block></next></block></statement><next><block type="selector" id="#vZz:ejH[T27?d8m5%./"><statement name="Ticks"><block type="guard" id="lMwp;.*|_F^4X!W^Tfe4"><value name="Precondition"><block type="preconditionvaluecheck" id="!L$~?xS8]j6FPLbpTM0F"><field name="Operator">=</field><value name="Operand1"><block type="variables_get" id="{%y8s51B`-{mR^h?y:FM"><field name="VAR" id="^In^HwnF_bNn4Xa([Ta?" variabletype="">TransplantHairAction</field></block></value><value name="Operand2"><block type="preconditionbool" id="6x-J)I?[aT+I@hS2Ok!J"><field name="bool">true</field></block></value></block></value><statement name="RunTick"><block type="adduseractiontree" id="h/cQGYtImk6hM}.tlEqb"><value name="TEXT"><block type="text" id="i,IxXo_HU+37w6L~.riI"><field name="TEXT">Transplant hair onto your body</field></block></value><statement name="TREE"><block type="action" id="nG/HVU~B?e!ty=KM]3k9"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionbool" id="FnWZV^I,`Wnyxq`6|IC5"><field name="bool">true</field></block></value><statement name="Effect"><block type="displayactioneffecttext" id="!u%d,%Ia#P@(k+KYAWPk"><value name="TEXT"><block type="text" id="TfA-](RSxnqZ$pNt}(*+"><field name="TEXT">You become more hairy.</field></block></value><next><block type="variables_set" id="jOCu7.B2dE.YCUI}0-Rz"><field name="VAR" id="fVH`k!Y}4_TI5F%16=?k" variabletype="">Fur</field><value name="VALUE"><block type="preconditionbool" id="s(r*GY#{popp:H_lYVHP"><field name="bool">true</field></block></value><next><block type="variables_set" id="Z$Wo!J,}LwC_B!9v2Aku"><field name="VAR" id="^In^HwnF_bNn4Xa([Ta?" variabletype="">TransplantHairAction</field><value name="VALUE"><block type="preconditionbool" id="JTaZ{L=!-~OescJ5I^K0"><field name="bool">false</field></block></value></block></next></block></next></block></statement></block></statement></block></statement><next><block type="action" id="@#F(K$9w}{.7RTlxe5Hu"><field name="TicksRequired">0</field><value name="Precondition"><block type="preconditionbool" id="]^LX~;66|jrn$Opq7K!p"><field name="bool">true</field></block></value></block></next></block></statement></block></next></block></next></block></next></block></next></block></next></block></next></block></statement></block></statement></block></statement></block></xml>
+
+  <script>
+
+    var agentsDropdown = [];
+    //TEMP: Loading Bella, Jacobine
+    var bella = "Bella";
+    agentsDropdown.push([bella, bella]);
+    var jacobine = "Jacobine";
+    agentsDropdown.push([jacobine, jacobine]);
+
+    Blockly.Blocks['attachtree'] = {
+      init: function() {
+        function dynamicOptions(){
+          return agentsDropdown;
+        }
+        var dropdown = new Blockly.FieldDropdown(dynamicOptions);
+        this.appendDummyInput()
+            .appendField("Agent")
+            .appendField(dropdown, 'AGENTNAMES');
+        this.appendStatementInput("TREE")
+            .setCheck(null);
+        this.setColour(230);
+      this.setTooltip("Attach a BT to an agent. You can attach only one BT to an agent");
+      this.setHelpUrl("");
+      }
+    };
+
+    var blocklyArea = document.getElementById('blocklyArea');
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var demoWorkspace = Blockly.inject(blocklyDiv,
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox'),
+          zoom:
+         {controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2},
+          trashcan: true});
+    var onresize = function(e) {
+      // Compute the absolute coordinates and dimensions of blocklyArea.
+      var element = blocklyArea;
+      var x = 0;
+      var y = 0;
+      do {
+        x += element.offsetLeft;
+        y += element.offsetTop;
+        element = element.offsetParent;
+      } while (element);
+      // Position blocklyDiv over blocklyArea.
+      blocklyDiv.style.left = x + 'px';
+      blocklyDiv.style.top = y + 'px';
+      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+    };
+    window.addEventListener('resize', onresize, false);
+    onresize();
+    Blockly.svgResize(demoWorkspace);
+
+    demoWorkspace.registerButtonCallback("addAgentPressed", promptAgentName);
+     function promptAgentName(){
+      var agentName = prompt("New agent name:");
+      agentsDropdown.push([agentName, agentName]);
+    }
+
+    demoWorkspace.registerToolboxCategoryCallback('AGENTS', agentsPopulateCallback);
+    function agentsPopulateCallback(){
+      var xmlList = [];
+      var blockText = '<xml><button text="Add Agent.." callbackKey="addAgentPressed"></button></xml>';
+      block = Blockly.Xml.textToDom(blockText).firstChild;
+      xmlList.push(block);
+      if (Blockly.Blocks['attachtree'] && agentsDropdown.length != 0) {
+          blockText = '<xml>' +
+              '<block type="attachtree">' +
+              '</block>' +
+              '</xml>';
+          block = Blockly.Xml.textToDom(blockText).firstChild;
+          xmlList.push(block);
+      }
+      return xmlList;
+    }
+
+    var xml_text = new XMLSerializer().serializeToString(document.getElementById('userwork'));
+    var xml = Blockly.Xml.textToDom(xml_text);
+    Blockly.Xml.domToWorkspace(xml, demoWorkspace);
+
+  </script>
+</body>
+</html>
