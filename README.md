@@ -49,3 +49,11 @@ You can then enter the source folder and run the tsc command on any typescript f
 ```
 tsc scripting.ts
 ```
+
+```
+tsc scripting.ts
+```
+#### Running your own game
+Create your own typescript file with the import statements copied from the `isolation.ts` file. Let's say you name your file `game.ts`. Replace `isolation.ts` with `game.ts` in the following files:
+* tsconfig.json
+* gulpfile.js
